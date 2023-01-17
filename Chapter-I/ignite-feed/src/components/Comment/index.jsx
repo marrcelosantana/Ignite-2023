@@ -2,10 +2,23 @@ import { Avatar } from "../Avatar";
 import { ThumbsUp, Trash } from "phosphor-react";
 
 import styles from "./styles.module.scss";
+import { useState } from "react";
 
 export function Comment({ comment, deleteComment }) {
+  const [likeCount, setLikeCount] = useState(0);
+
   function handleDeleteComment() {
     deleteComment(comment);
+  }
+
+  function handleLike() {
+    if (likeCount == 0) {
+      setLikeCount(1);
+    }
+
+    if (likeCount == 1) {
+      setLikeCount(0);
+    }
   }
 
   return (
@@ -30,9 +43,13 @@ export function Comment({ comment, deleteComment }) {
         </div>
 
         <footer className={styles.footer}>
-          <button>
-            <ThumbsUp />
-            Aplaudir <span>20</span>
+          <button onClick={handleLike}>
+            {likeCount == 0 ? (
+              <ThumbsUp />
+            ) : (
+              <ThumbsUp weight="fill" color="#00b373" />
+            )}
+            Curtir <span>{likeCount}</span>
           </button>
         </footer>
       </div>
