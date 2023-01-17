@@ -31,6 +31,14 @@ export function Post({ author, content, publishedAt }) {
     setNewCommentText("");
   }
 
+  function deleteComment(commentToDelete) {
+    const commentsWhithoutDeleteOne = comments.filter((comment) => {
+      return comment !== commentToDelete;
+    });
+
+    setComments(commentsWhithoutDeleteOne);
+  }
+
   return (
     <article className={styles.post}>
       <header className={styles.header}>
@@ -53,10 +61,10 @@ export function Post({ author, content, publishedAt }) {
       <div className={styles.content}>
         {content.map((line) => {
           if (line.type === "paragraph") {
-            return <p>{line.content}</p>;
+            return <p key={line.content}>{line.content}</p>;
           } else {
             return (
-              <p href="">
+              <p key={line.content}>
                 <a href="">{line.content}</a>
               </p>
             );
@@ -71,15 +79,24 @@ export function Post({ author, content, publishedAt }) {
           placeholder="Deixe um comentário"
           value={newCommentText}
           onChange={handleNewCommentChange}
+          required
         />
 
         <footer>
-          <button type="submit">Comentar</button>
+          <button type="submit" disabled={newCommentText.length == 0}>
+            Comentar
+          </button>
         </footer>
       </form>
       <div className={styles.commentList}>
         {comments.map((comment) => {
-          return <Comment comment={comment} />;
+          return (
+            <Comment
+              comment={comment}
+              key={comment}
+              deleteComment={deleteComment}
+            />
+          );
         })}
       </div>
     </article>
